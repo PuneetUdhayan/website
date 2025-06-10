@@ -13,7 +13,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay"
+import Autoplay from "embla-carousel-autoplay";
+import { useBreakpoint } from "./hooks/useBreakpoint";
+import { Navigation } from "./components/nav-menu";
 
 function App() {
   const nameText = "I am Puneet Udhayan";
@@ -23,7 +25,8 @@ function App() {
   const [initialRender, setInitialRender] = useState(true);
   const [nameAnimationComplete, setNameAnimationComplete] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
-
+  const currentBreakpoint = useBreakpoint();
+  console.log({currentBreakpoint})
   useEffect(() => {
     // Simulate the animation duration or a condition for completion
     const animationDuration = nameText.length * 0.03 + 0.04 * 1 + 0.5; // Roughly based on your stagger and delay
@@ -55,9 +58,10 @@ function App() {
 
   return (
     <div>
+      {/* <Navigation/> */}
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="h-screen flex items-center">
-          <div>
+          <motion.div>
             <div>
               <LetterAnimation text={"I am Puneet Udhayan."} />
             </div>
@@ -71,14 +75,12 @@ function App() {
               <h1 className="flex items-center text-3xl md:text-3xl lg:text-4xl xl:text-6xl font-astralaga">
                 {intro}&nbsp;
                 <motion.div
-                  layout
                   initial={{ padding: "0px", margin: "0px" }}
                   animate={{ padding: "10px", margin: "10px" }}
                   transition={{ duration: 0.5 }}
                   className="relative inline-flex items-center justify-between"
                 >
                   <AnimatePresence mode="wait">
-                    {" "}
                     {/* 'wait' mode ensures the old element animates out before the new one animates in */}
                     <motion.div
                       key={selectedIndex} // IMPORTANT: The key must change when the content changes
@@ -163,56 +165,58 @@ function App() {
                 </motion.div>
               </h1>
             )}
-          </div>
+          </motion.div>
         </div>
-        <div className="h-screen flex-column">
-          <motion.h1 className="scroll-m-20 text-3xl font-astralaga tracking-tight text-balance my-5">
-            What I'm upto
-          </motion.h1>
-          <div>
-            <Carousel
-            opts={{
-              align: "start",
-            }}
-            orientation="vertical"
-            plugins={[
-              Autoplay({
-                delay: 2000,
-              }),
-            ]}
-          >
-            <CarouselContent className="h-[calc(100vh-150px)]">
-              {Array.from({ length: 15 }).map((_, index) => (
-                <CarouselItem key={index} className="pt-1 md:basis-1/4">
-                  <div className="p-1">
-                    <Card className="h-[200px]">
-                      <CardContent className="flex items-center justify-center p-6">
-                        <span className="text-3xl font-semibold">
-                          {index + 1}
-                        </span>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
+        {animationComplete && (
+          <div className="h-screen flex-column bg-secondary md:bg-white">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }} // Start invisible and slightly below
+              animate={{ opacity: 1, y: 0 }} // Animate to fully visible and original position
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="scroll-m-20 text-3xl font-astralaga tracking-tight text-balance my-5"
+            >
+              What I'm upto
+            </motion.h1>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }} // Start invisible and slightly below
+              animate={{ opacity: 1, y: 0 }} // Animate to fully visible and original position
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <Carousel
+                opts={{
+                  align: "start",
+                }}
+                orientation={["sm", "xs"].includes(currentBreakpoint)? "horizontal":"vertical"}
+                plugins={[
+                  Autoplay({
+                    delay: 2000,
+                  }),
+                ]}
+              >
+                <CarouselContent className="h-[calc(100vh-150px)]">
+                  {Array.from({ length: 15 }).map((_, index) => (
+                    <CarouselItem key={index} className="pt-1 md:basis-1/4">
+                      <div className="p-1">
+                        <Card className="h-full md:h-[200px]">
+                          <CardContent className="flex items-center justify-center p-6">
+                            <span className="text-3xl font-semibold">
+                              {index + 1}
+                            </span>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </motion.div>
           </div>
-        </div>
+        )}
       </div>
       <div className="min-h-screen w-full flex items-center justify-center bg-gray-900 overflow-hidden font-sans relative">
         <div className="absolute inset-0 bg-cover bg-no-repeat animate-pan-background">
-          {/*
-          This div acts as the background.
-          - `absolute inset-0`: Makes it cover the entire parent container.
-          - `bg-cover`: Ensures the background image covers the element.
-          - `bg-no-repeat`: Prevents the background image from repeating.
-          - `animate-pan-background`: Applies the custom panning animation defined in the CSS.
-          - `style`: Sets the background image. Replace with your desired image URL.
-                     A placeholder image is used here.
-        */}
           <div
             className="absolute inset-0 bg-cover bg-no-repeat"
             style={{
