@@ -4,6 +4,7 @@
 }
 
 @import "tailwindcss";
+@import 'tailwind-scrollbar-hide/v4';
 @import "tw-animate-css";
 
 

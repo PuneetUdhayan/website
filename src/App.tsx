@@ -26,7 +26,7 @@ function App() {
   const [nameAnimationComplete, setNameAnimationComplete] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
   const currentBreakpoint = useBreakpoint();
-  console.log({currentBreakpoint})
+  console.log({ currentBreakpoint });
   useEffect(() => {
     // Simulate the animation duration or a condition for completion
     const animationDuration = nameText.length * 0.03 + 0.04 * 1 + 0.5; // Roughly based on your stagger and delay
@@ -57,9 +57,18 @@ function App() {
   };
 
   return (
-    <div>
+    <div
+      className="
+        h-screen             
+        overflow-y-scroll    
+        snap-y              
+        snap-mandatory      
+        scroll-smooth
+        scrollbar-hide
+      "
+    >
       {/* <Navigation/> */}
-      <div className="grid grid-cols-1 md:grid-cols-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 snap-start">
         <div className="h-screen flex items-center">
           <motion.div>
             <div>
@@ -168,7 +177,7 @@ function App() {
           </motion.div>
         </div>
         {animationComplete && (
-          <div className="h-screen flex-column bg-secondary md:bg-white">
+          <div className="h-screen flex-column bg-secondary md:bg-white snap-start">
             <motion.h1
               initial={{ opacity: 0, y: 20 }} // Start invisible and slightly below
               animate={{ opacity: 1, y: 0 }} // Animate to fully visible and original position
@@ -186,7 +195,11 @@ function App() {
                 opts={{
                   align: "start",
                 }}
-                orientation={["sm", "xs"].includes(currentBreakpoint)? "horizontal":"vertical"}
+                orientation={
+                  ["sm", "xs"].includes(currentBreakpoint)
+                    ? "horizontal"
+                    : "vertical"
+                }
                 plugins={[
                   Autoplay({
                     delay: 2000,
@@ -215,7 +228,7 @@ function App() {
           </div>
         )}
       </div>
-      <div className="min-h-screen w-full flex items-center justify-center bg-gray-900 overflow-hidden font-sans relative">
+      <div className="min-h-screen w-full flex items-center justify-center bg-gray-900 overflow-hidden font-sans relative snap-start">
         <div className="absolute inset-0 bg-cover bg-no-repeat animate-pan-background">
           <div
             className="absolute inset-0 bg-cover bg-no-repeat"
