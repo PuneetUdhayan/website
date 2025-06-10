@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { useBreakpoint } from "./hooks/useBreakpoint";
-import { Navigation } from "./components/nav-menu";
 
 function App() {
   const nameText = "I am Puneet Udhayan";
@@ -62,8 +61,7 @@ function App() {
         h-screen             
         overflow-y-scroll    
         snap-y              
-        snap-mandatory      
-        scroll-smooth
+        snap-mandatory
         scrollbar-hide
       "
     >
