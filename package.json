@@ -25,6 +25,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.58.0",
+    "react-social-media-embed": "^2.5.18",
     "tailwind-merge": "^3.3.0",
     "tailwind-scrollbar-hide": "^4.0.0",
     "tailwindcss": "^4.1.8",

@@ -7,8 +7,20 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { InstagramEmbed } from "react-social-media-embed";
 
 export default function RecentActivity() {
+  const instaUrl = [
+    "https://www.instagram.com/p/DHOSDCwIma_/",
+    "https://www.instagram.com/p/DJdrVp4o1C-/",
+    "https://www.instagram.com/p/DD7XvJBoH23/",
+    "https://www.instagram.com/p/DDzW_5zo2BT/",
+    "https://www.instagram.com/p/DDUFoYROJUW/",
+    "https://www.instagram.com/p/DBYonCatUMD/",
+    "https://www.instagram.com/p/DAzg6BNygtZ/",
+    "https://www.instagram.com/p/DAkEk-IzVnm/",
+    "https://www.instagram.com/p/DAkEYYZImWp/",
+  ];
   return (
     <div className="h-screen bg-secondary md:bg-white snap-start">
       <motion.h1
@@ -22,29 +34,24 @@ export default function RecentActivity() {
       <motion.div
         initial={{ opacity: 0, y: 20 }} // Start invisible and slightly below
         animate={{ opacity: 1, y: 0 }} // Animate to fully visible and original position
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 1.8, ease: "easeOut" }}
         className="h-full"
       >
         <Carousel
-          opts={{
-            align: "start",
-          }}
           plugins={[
             Autoplay({
               delay: 3000,
             }),
           ]}
-          className="h-full"
+          className="w-full"
         >
-          <CarouselContent className="h-full">
-            {Array.from({ length: 15 }).map((_, index) => (
-              <CarouselItem key={index} className="pt-1 h-full">
-                <div className="p-1 h-full">
+          <CarouselContent>
+            {instaUrl.map((url, index) => (
+              <CarouselItem key={index}>
+                <div className="p-1">
                   <Card className="m-2 h-full">
                     <CardContent className="flex items-center justify-center p-6">
-                      <span className="text-3xl my-15 font-semibold">
-                        {index + 1}
-                      </span>
+                      <InstagramEmbed url={url} captioned height={500} />
                     </CardContent>
                   </Card>
                 </div>
