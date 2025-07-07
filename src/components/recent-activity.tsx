@@ -1,20 +1,21 @@
 import { motion } from "motion/react";
-
 import { Carousel } from "react-responsive-carousel";
-
-import CarouselTile from "./carousel-tile";
+import { InstagramEmbed } from "react-social-media-embed";
+import { LinkedInEmbed } from "react-social-media-embed";
 
 export default function RecentActivity() {
   const instaUrl = [
     "https://www.instagram.com/p/DHOSDCwIma_/",
+    "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7346445264938815490?collapsed=1",
     "https://www.instagram.com/p/DJdrVp4o1C-/",
-    // "https://www.instagram.com/p/DD7XvJBoH23/",
-    // "https://www.instagram.com/p/DDzW_5zo2BT/",
-    // "https://www.instagram.com/p/DDUFoYROJUW/",
-    // "https://www.instagram.com/p/DBYonCatUMD/",
-    // "https://www.instagram.com/p/DAzg6BNygtZ/",
-    // "https://www.instagram.com/p/DAkEk-IzVnm/",
-    // "https://www.instagram.com/p/DAkEYYZImWp/",
+    "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7343148023922704385?collapsed=1",
+    "https://www.instagram.com/p/DD7XvJBoH23/",
+    "https://www.instagram.com/p/DDzW_5zo2BT/",
+    "https://www.instagram.com/p/DDUFoYROJUW/",
+    "https://www.instagram.com/p/DBYonCatUMD/",
+    "https://www.instagram.com/p/DAzg6BNygtZ/",
+    "https://www.instagram.com/p/DAkEk-IzVnm/",
+    "https://www.instagram.com/p/DAkEYYZImWp/",
   ];
   return (
     <div className="h-[100vh] flex justify-center items-center bg-white md:bg-transparent snap-start">
@@ -42,9 +43,11 @@ export default function RecentActivity() {
               infiniteLoop
               dynamicHeight={false}
             >
-              {instaUrl.map((url) => (
-                <CarouselTile url={url} />
-              ))}
+              {instaUrl.map((url) => {
+                if (url.includes("instagram"))
+                  return <InstagramEmbed url={url} />;
+                else return <LinkedInEmbed url={url} />;
+              })}
             </Carousel>
           </div>
         </motion.div>
