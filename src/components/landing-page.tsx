@@ -8,6 +8,8 @@ import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 import RecentActivity from "./recent-activity";
 
+import UnicornScene from "unicornstudio-react";
+
 export default function LandingPage() {
   const nameText = "I am Puneet Udhayan";
   const intro = "I am ";
@@ -48,7 +50,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 snap-start">
+    <div className="grid grid-cols-1 md:grid-cols-2 snap-start relative">
       <div className="h-screen flex items-center">
         <motion.div>
           <div>
@@ -157,6 +159,14 @@ export default function LandingPage() {
         </motion.div>
       </div>
       {animationComplete && <RecentActivity />}
+      <div className="h-[100vh] w-[100vw] snap-start absolute z-[-1]">
+        <UnicornScene
+          projectId="00uBJitC7TKBXzEMswis"
+          width={"100%"}
+          height={"100%"}
+          production={true}
+        />
+      </div>
     </div>
   );
 }

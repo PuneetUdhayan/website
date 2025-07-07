@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { InstagramEmbed } from "react-social-media-embed";
+import { Button } from "./ui/button";
 
 export default function RecentActivity() {
   const instaUrl = [
@@ -22,44 +23,50 @@ export default function RecentActivity() {
     "https://www.instagram.com/p/DAkEYYZImWp/",
   ];
   return (
-    <div className="h-screen bg-secondary md:bg-white snap-start">
-      <motion.h1
-        initial={{ opacity: 0, y: 20 }} // Start invisible and slightly below
-        animate={{ opacity: 1, y: 0 }} // Animate to fully visible and original position
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="scroll-m-20 text-3xl font-astralaga tracking-tight text-balance my-5"
-      >
-        What I'm upto
-      </motion.h1>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }} // Start invisible and slightly below
-        animate={{ opacity: 1, y: 0 }} // Animate to fully visible and original position
-        transition={{ duration: 1.8, ease: "easeOut" }}
-        className="h-full"
-      >
-        <Carousel
-          plugins={[
-            Autoplay({
-              delay: 3000,
-            }),
-          ]}
-          className="w-full"
+    <div className="h-[100vh] flex flex-col bg-secondary md:bg-transparent snap-start">
+      <div>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }} // Start invisible and slightly below
+          animate={{ opacity: 1, y: 0 }} // Animate to fully visible and original position
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="scroll-m-20 text-3xl font-astralaga tracking-tight text-balance my-5"
         >
-          <CarouselContent>
-            {instaUrl.map((url, index) => (
-              <CarouselItem key={index}>
-                <div className="p-1">
-                  <Card className="m-2 h-full">
-                    <CardContent className="flex items-center justify-center p-6">
-                      <InstagramEmbed url={url} captioned height={500} />
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </motion.div>
+          What I'm upto
+        </motion.h1>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} // Start invisible and slightly below
+          animate={{ opacity: 1, y: 0 }} // Animate to fully visible and original position
+          transition={{ duration: 1.8, ease: "easeOut" }}
+          className="flex-1 overflow-hidden"
+        >
+          <Carousel
+            plugins={[
+              Autoplay({
+                delay: 3000,
+              }),
+            ]}
+            className="w-full h-full"
+          >
+            <CarouselContent className="h-full">
+              {instaUrl.map((url, index) => (
+                <CarouselItem key={index} className="h-full">
+                  <div className="m-1">
+                    <Card className="m-2 h-full">
+                      <CardContent className="flex items-center justify-center p-6 h-full">
+                        <InstagramEmbed url={url} width={350} />
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </motion.div>
+        <div>
+          <Button>Sup</Button>
+          <Button>Sup</Button>
+        </div>
+      </div>
     </div>
   );
 }
