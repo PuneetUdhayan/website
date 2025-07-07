@@ -39,7 +39,7 @@ export default function LandingPage() {
     }, animationDuration * 1000); // Convert to milliseconds
 
     return () => clearTimeout(timer); // Clean up the timer
-  }, [intro, nameText, setAnimationComplete, options]);
+  }, [intro, nameText, setAnimationComplete]);
 
   const textVariants = {
     initial: { y: 20, opacity: 0 },

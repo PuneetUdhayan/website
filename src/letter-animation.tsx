@@ -1,15 +1,15 @@
-import { motion } from 'motion/react';
-import type React from 'react';
+import { motion, type Variants } from "motion/react";
+import type React from "react";
 
 interface LetterAnimationProps {
   text: string;
 }
 
-const LetterAnimation: React.FC<LetterAnimationProps> = ({text}) => {
+const LetterAnimation: React.FC<LetterAnimationProps> = ({ text }) => {
   const letters = Array.from(text);
 
   // Variants for the container
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
@@ -18,7 +18,7 @@ const LetterAnimation: React.FC<LetterAnimationProps> = ({text}) => {
   };
 
   // Variants for each letter
-  const child = {
+  const child: Variants = {
     visible: {
       opacity: 1,
       x: 0,
