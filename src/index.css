@@ -6,6 +6,37 @@
 @import "tailwindcss";
 @import 'tailwind-scrollbar-hide/v4';
 @import "tw-animate-css";
+/* @import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css"; */
+@import "react-responsive-carousel/lib/styles/carousel.min.css";
+
+/* CarouselOverrides.css */
+
+/* This targets the main carousel container */
+.carousel-root,
+.carousel {
+  height: 100%;
+  /* If you want it to fill the entire viewport, you might add: */
+  /* position: fixed; */
+  /* top: 0; */
+  /* left: 0; */
+}
+
+/* This targets the slider container that holds the individual slides */
+.carousel .slider-wrapper,
+.carousel .slider {
+  height: 100%;
+}
+
+/* This targets each individual slide */
+.carousel .slide {
+  height: 100%;
+  /* Optional: Center content if needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 
 @custom-variant dark (&:is(.dark *));

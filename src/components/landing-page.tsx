@@ -1,14 +1,12 @@
-import LetterAnimation from "@/letter-animation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronUpIcon, ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 import { useBreakpoint } from "@/hooks/useBreakpoint";
 
+import LetterAnimation from "@/letter-animation";
 import RecentActivity from "./recent-activity";
-
-import UnicornScene from "unicornstudio-react";
+import { MemoizedUnicornScene } from "./memoised-unicorn-scene";
 
 export default function LandingPage() {
   const nameText = "I am Puneet Udhayan";
@@ -118,14 +116,14 @@ export default function LandingPage() {
 
                 {/* Borders - these can remain as they are, their positioning is absolute relative to their parent */}
                 <motion.div
-                  className="absolute top-0 left-0 h-1 w-full bg-gray-300"
+                  className="absolute top-0 left-0 h-1 w-full bg-white"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 0.5, ease: "easeInOut", delay: 0 }}
                   style={{ originX: 0 }}
                 />
                 <motion.div
-                  className="absolute top-0 right-0 w-1 h-full bg-gray-300"
+                  className="absolute top-0 right-0 w-1 h-full bg-white"
                   initial={{ scaleY: 0 }}
                   animate={{ scaleY: 1 }}
                   transition={{
@@ -136,14 +134,14 @@ export default function LandingPage() {
                   style={{ originY: 0 }}
                 />
                 <motion.div
-                  className="absolute bottom-0 right-0 h-1 w-full bg-gray-300"
+                  className="absolute bottom-0 right-0 h-1 w-full bg-white"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 0.5, ease: "easeInOut", delay: 1 }}
                   style={{ originX: 1 }}
                 />
                 <motion.div
-                  className="absolute bottom-0 left-0 w-1 h-full bg-gray-300"
+                  className="absolute bottom-0 left-0 w-1 h-full bg-white"
                   initial={{ scaleY: 0 }}
                   animate={{ scaleY: 1 }}
                   transition={{
@@ -159,14 +157,7 @@ export default function LandingPage() {
         </motion.div>
       </div>
       {animationComplete && <RecentActivity />}
-      <div className="h-[100vh] w-[100vw] snap-start absolute z-[-1]">
-        <UnicornScene
-          projectId="00uBJitC7TKBXzEMswis"
-          width={"100%"}
-          height={"100%"}
-          production={true}
-        />
-      </div>
+      <MemoizedUnicornScene />
     </div>
   );
 }
