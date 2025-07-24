@@ -39,6 +39,18 @@ export default function LandingPage() {
     return () => clearTimeout(timer); // Clean up the timer
   }, [intro, nameText, setAnimationComplete]);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      console.log({ initialRender });
+      if (initialRender) {
+        setSelectedIndex((prev) => (prev + 1) % options.length);
+      }
+    }, 3500);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
+  }, [initialRender]);
+
   const textVariants = {
     initial: { y: 20, opacity: 0 },
     animate: { y: 0, opacity: 1 },
@@ -154,7 +166,9 @@ export default function LandingPage() {
           )}
         </motion.div>
       </div>
-      {animationComplete && <RecentActivity kind={""} />}
+      {animationComplete && (
+        <RecentActivity kind={initialRender ? "" : options[selectedIndex]} />
+      )}
       <MemoizedUnicornScene />
     </div>
   );
