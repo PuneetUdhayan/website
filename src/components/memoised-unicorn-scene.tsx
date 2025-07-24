@@ -8,6 +8,7 @@ export const MemoizedUnicornScene = memo(() => (
       width={"100%"}
       height={"100%"}
       production={true}
+      placeholder={<div className="h-full w-full bg-[#c8c4c4]"></div>}
     />
   </div>
 ));

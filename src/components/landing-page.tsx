@@ -154,7 +154,7 @@ export default function LandingPage() {
           )}
         </motion.div>
       </div>
-      {animationComplete && <RecentActivity />}
+      {animationComplete && <RecentActivity kind={""} />}
       <MemoizedUnicornScene />
     </div>
   );
