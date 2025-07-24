@@ -2,8 +2,16 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 
+type ActivityItem = {
+  id: number;
+  title: string;
+  description: string;
+  link: string;
+  kind: string;
+};
+
 export default function RecentActivity({ kind }: { kind: string }) {
-  const data = [
+  const data: ActivityItem[] = [
     {
       id: 1,
       title: "ZOI",
@@ -91,10 +99,9 @@ export default function RecentActivity({ kind }: { kind: string }) {
       kind: "a",
     },
   ];
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<ActivityItem[]>([]);
 
   useEffect(() => {
-    console.log({ kind });
     if (kind === "") {
       setItems(data);
     } else {
