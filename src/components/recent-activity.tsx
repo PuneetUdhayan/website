@@ -42,7 +42,14 @@ export default function RecentActivity() {
               dynamicHeight={false}
             >
               {data.map((item) => (
-                <div className="h-full w-full bg-white">{item}</div>
+                <div
+                  className="h-full w-full bg-white"
+                  onClick={() =>
+                    window.open(item, "_blank", "noopener,noreferrer")
+                  }
+                >
+                  {item}
+                </div>
               ))}
             </Carousel>
           </div>

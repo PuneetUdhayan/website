@@ -1,8 +1,6 @@
-
 import "./App.css";
 
 import LandingPage from "./components/landing-page";
-import ContactMe from "./components/contact-me";
 
 function App() {
   return (
@@ -16,7 +14,6 @@ function App() {
       "
     >
       <LandingPage />
-      <ContactMe />
     </div>
   );
 }
