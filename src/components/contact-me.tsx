@@ -47,6 +47,7 @@ export default function ContactMe() {
                   href="https://www.linkedin.com/in/puneet-udhayan"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="LinkedIn profile"
                 >
                   <Linkedin />
                 </a>
@@ -56,6 +57,7 @@ export default function ContactMe() {
                   href="https://www.instagram.com/puneets_art/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Instagram page"
                 >
                   <Instagram />
                 </a>
@@ -65,6 +67,7 @@ export default function ContactMe() {
                   href="https://www.youtube.com/@PuneetUdhayan"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Youtube channel"
                 >
                   <Youtube />
                 </a>
@@ -74,6 +77,7 @@ export default function ContactMe() {
                   href="mailto:puneetudhayan@gmail.com"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Send me an email"
                 >
                   <Mail />
                 </a>

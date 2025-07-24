@@ -105,6 +105,7 @@ export default function LandingPage() {
                         setSelectedIndex((i) => i - 1);
                       }
                     }}
+                    aria-label="Scroll up"
                   >
                     <ChevronUpIcon />
                   </Button>
@@ -119,6 +120,7 @@ export default function LandingPage() {
                         setSelectedIndex((i) => i + 1);
                       }
                     }}
+                    aria-label="Scroll down"
                   >
                     <ChevronDownIcon />
                   </Button>
