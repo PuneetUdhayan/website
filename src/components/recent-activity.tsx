@@ -1,10 +1,8 @@
 import { motion } from "motion/react";
 import { Carousel } from "react-responsive-carousel";
-import { InstagramEmbed } from "react-social-media-embed";
-import { LinkedInEmbed } from "react-social-media-embed";
 
 export default function RecentActivity() {
-  const instaUrl = [
+  const data = [
     "https://www.instagram.com/p/DHOSDCwIma_/",
     "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7346445264938815490?collapsed=1",
     "https://www.instagram.com/p/DJdrVp4o1C-/",
@@ -43,11 +41,9 @@ export default function RecentActivity() {
               infiniteLoop
               dynamicHeight={false}
             >
-              {instaUrl.map((url) => {
-                if (url.includes("instagram"))
-                  return <InstagramEmbed url={url} />;
-                else return <LinkedInEmbed url={url} />;
-              })}
+              {data.map((item) => (
+                <div className="h-full w-full bg-white">{item}</div>
+              ))}
             </Carousel>
           </div>
         </motion.div>

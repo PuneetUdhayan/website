@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronUpIcon, ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 import LetterAnimation from "@/letter-animation";
 import RecentActivity from "./recent-activity";
@@ -16,8 +15,7 @@ export default function LandingPage() {
   const [initialRender, setInitialRender] = useState(true);
   const [nameAnimationComplete, setNameAnimationComplete] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
-  const currentBreakpoint = useBreakpoint();
-  console.log({ currentBreakpoint });
+
   useEffect(() => {
     // Simulate the animation duration or a condition for completion
     const animationDuration = nameText.length * 0.03 + 0.04 * 1 + 0.5; // Roughly based on your stagger and delay
