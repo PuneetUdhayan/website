@@ -1,45 +1,124 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function Contact() {
   const bgRef = useRef(null);
   const containerRef = useRef(null);
+  const cardRef = useRef(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Set initial state - small rectangle centered
-      gsap.set(bgRef.current, {
-        width: 135,
-        height: 175,
-        left: "50%",
-        top: "50%",
-        xPercent: -50,
-        yPercent: -50,
-      });
+  useGSAP(
+    () => {
+      const ctx = gsap.context(() => {
+        // Set initial state - small rectangle off-screen below
+        gsap.set(bgRef.current, {
+          width: 135,
+          height: 175,
+          left: "50%",
+          top: "150%",
+          xPercent: -50,
+          yPercent: -50,
+        });
 
-      // Animate to expanded size with border margin on scroll
-      gsap.to(bgRef.current, {
-        width: "calc(100% - 20rem)", // 5rem margin on each side (inset-20)
-        height: "calc(100% - 20rem)",
-        left: "50%",
-        top: "50%",
-        xPercent: -50,
-        yPercent: -50,
-        ease: "power2.out",
-        scrollTrigger: {
+        // Hide contact card initially
+        gsap.set(cardRef.current, {
+          opacity: 0,
+          y: 20,
+        });
+
+        // Pin the section during animation
+        ScrollTrigger.create({
           trigger: containerRef.current,
-          start: "top bottom",
-          end: "top center",
+          start: "top top",
+          end: () => `+=${window.innerHeight * 2}`,
+          pin: true,
+          anticipatePin: 1,
           scrub: 1,
-        },
-      });
-    }, containerRef);
+        });
 
-    return () => ctx.revert();
-  }, []);
+        // Animate based on scroll progress with phases
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          start: "top top",
+          end: () => `+=${window.innerHeight * 2}`,
+          scrub: 1,
+          onUpdate: (self) => {
+            const progress = self.progress;
+
+            // Phase 1: Move small div to center (0 to 0.3)
+            if (progress <= 0.3) {
+              const phase1Progress = progress / 0.3;
+              const easedProgress =
+                gsap.parseEase("power2.out")(phase1Progress);
+              const topPos = 150 - 100 * easedProgress; // Move from 150% to 50%
+
+              gsap.set(bgRef.current, {
+                width: 135,
+                height: 175,
+                left: "50%",
+                top: `${topPos}%`,
+                xPercent: -50,
+                yPercent: -50,
+              });
+              gsap.set(cardRef.current, { opacity: 0, y: 20 });
+            }
+            // Phase 2: Expand the div (0.3 to 0.7)
+            else if (progress <= 0.7) {
+              const phase2Progress = (progress - 0.3) / 0.4;
+              const easedProgress =
+                gsap.parseEase("power1.inOut")(phase2Progress);
+
+              // Calculate dimensions
+              const startWidth = 135;
+              const endWidth = window.innerWidth - 320; // 20rem = 320px
+              const startHeight = 175;
+              const endHeight = window.innerHeight - 320;
+
+              const currentWidth =
+                startWidth + (endWidth - startWidth) * easedProgress;
+              const currentHeight =
+                startHeight + (endHeight - startHeight) * easedProgress;
+
+              gsap.set(bgRef.current, {
+                width: currentWidth,
+                height: currentHeight,
+                left: "50%",
+                top: "50%",
+                xPercent: -50,
+                yPercent: -50,
+              });
+              gsap.set(cardRef.current, { opacity: 0, y: 20 });
+            }
+            // Phase 3: Fade in contact card (0.7 to 1)
+            else {
+              const phase3Progress = (progress - 0.7) / 0.3;
+              const easedProgress =
+                gsap.parseEase("power2.out")(phase3Progress);
+
+              gsap.set(bgRef.current, {
+                width: "calc(100% - 20rem)",
+                height: "calc(100% - 20rem)",
+                left: "50%",
+                top: "50%",
+                xPercent: -50,
+                yPercent: -50,
+              });
+              gsap.set(cardRef.current, {
+                opacity: easedProgress,
+                y: 20 - 20 * easedProgress,
+              });
+            }
+          },
+        });
+      }, containerRef);
+
+      return () => ctx.revert();
+    },
+    { scope: containerRef }
+  );
 
   return (
     <div
@@ -58,7 +137,10 @@ function Contact() {
       />
 
       {/* Contact card */}
-      <div className="bg-white/95 backdrop-blur-sm p-12 max-w-md relative z-10 shadow-lg">
+      <div
+        ref={cardRef}
+        className="bg-white/95 backdrop-blur-sm p-12 max-w-md relative z-10 shadow-lg"
+      >
         <h1 className="font-main text-5xl mb-6">Contact me</h1>
         <p className="text-gray-600 text-lg mb-8 leading-relaxed">
           Have a question, project idea, or just want to say hello? I'd love to
