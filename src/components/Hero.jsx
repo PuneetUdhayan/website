@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import ParallaxRectangles from "./ParallaxRectangles";
 import HorizontalGallery from "./HorizontalGallery";
+import Contact from "./Contact";
 
 function Hero() {
   const titles = ["a software engineer", "an artist"];
@@ -114,9 +115,7 @@ function Hero() {
       </div>
 
       <HorizontalGallery />
-      <div className="h-screen bg-red-500/50">
-        <h1 className="font-main text-6xl">Contact me</h1>
-      </div>
+      <Contact />
     </>
   );
 }
