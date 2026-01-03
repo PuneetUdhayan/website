@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import ParallaxRectangles from "./ParallaxRectangles";
+import HorizontalGallery from "./HorizontalGallery";
 
 function Hero() {
-  const titles = ["a computer engineer", "an artist"];
+  const titles = ["a software engineer", "an artist"];
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
   const titleContainerRef = useRef(null);
 
@@ -58,10 +59,8 @@ function Hero() {
         </div>
       </div>
 
-      <div className="h-screen">
-        <h1 className="font-main text-6xl">Here is what I am upto</h1>
-      </div>
-      <div className="h-screen bg-red">
+      <HorizontalGallery />
+      <div className="h-screen bg-red-500/50">
         <h1 className="font-main text-6xl">Contact me</h1>
       </div>
     </>
@@ -69,3 +68,5 @@ function Hero() {
 }
 
 export default Hero;
+
+// Made with Bob

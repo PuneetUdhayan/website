@@ -435,6 +435,7 @@ function ParallaxRectangles() {
 
   return (
     <div
+      id="parallax-rectangles"
       ref={containerRef}
       className="fixed inset-0 pointer-events-none overflow-hidden"
       style={{ zIndex: 0 }}
