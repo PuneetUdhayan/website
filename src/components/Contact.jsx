@@ -1,9 +1,54 @@
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
 function Contact() {
+  const bgRef = useRef(null);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Set initial state - small rectangle centered
+      gsap.set(bgRef.current, {
+        width: 135,
+        height: 175,
+        left: "50%",
+        top: "50%",
+        xPercent: -50,
+        yPercent: -50,
+      });
+
+      // Animate to expanded size with border margin on scroll
+      gsap.to(bgRef.current, {
+        width: "calc(100% - 20rem)", // 5rem margin on each side (inset-20)
+        height: "calc(100% - 20rem)",
+        left: "50%",
+        top: "50%",
+        xPercent: -50,
+        yPercent: -50,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top bottom",
+          end: "top center",
+          scrub: 1,
+        },
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="h-screen relative flex items-center justify-center">
-      {/* Blue border frame */}
+    <div
+      ref={containerRef}
+      className="h-screen relative flex items-center justify-center"
+    >
       <div
-        className="absolute inset-45 pointer-events-none"
+        ref={bgRef}
+        className="absolute pointer-events-none"
         style={{
           backgroundImage: "url('/src/assets/pondicherry.jpeg')",
           backgroundSize: "cover",
