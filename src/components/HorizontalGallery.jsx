@@ -214,7 +214,7 @@ function HorizontalGallery() {
         >
           <div className="relative flex items-center gap-12">
             <div
-              className={`gallery-image ${item.color} w-[500px] h-[500px] rounded-3xl flex items-center justify-center`}
+              className={`gallery-image ${item.color} w-[500px] h-[500px] flex items-center justify-center`}
             >
               <div className="text-black text-9xl font-bold opacity-30">
                 {item.id}
