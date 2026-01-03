@@ -40,13 +40,6 @@ function HorizontalGallery() {
       color: "bg-gradient-to-br from-pink-500 to-rose-600",
       link: "#ai-integration",
     },
-    {
-      id: 5,
-      title: "Cloud Platform",
-      description: "Scalable infrastructure for enterprise solutions",
-      color: "bg-gradient-to-br from-indigo-500 to-blue-600",
-      link: "#cloud-platform",
-    },
   ];
 
   useGSAP(
