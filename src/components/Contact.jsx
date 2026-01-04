@@ -129,7 +129,7 @@ function Contact() {
         ref={bgRef}
         className="absolute pointer-events-none"
         style={{
-          backgroundImage: "url('/pondicherry.jpeg')",
+          backgroundImage: `url('${import.meta.env.BASE_URL}pondicherry.jpeg')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
