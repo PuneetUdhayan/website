@@ -129,7 +129,7 @@ function Contact() {
         ref={bgRef}
         className="absolute pointer-events-none"
         style={{
-          backgroundImage: "url('/src/assets/pondicherry.jpeg')",
+          backgroundImage: "url('/pondicherry.jpeg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
