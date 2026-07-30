@@ -2,6 +2,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
+import { getLenis } from "../hooks/useLenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -140,6 +141,19 @@ function TopNav() {
             ref={(el) => (linksRef.current[2] = el)}
             className="nav-link relative overflow-hidden cursor-pointer"
             style={{ opacity: 0 }}
+            onClick={(e) => {
+              e.preventDefault();
+              const lenis = getLenis();
+              const target = document.getElementById("contact");
+              if (target) {
+                const offset = target.offsetTop + window.innerHeight * 2;
+                if (lenis) {
+                  lenis.scrollTo(offset, { duration: 4 });
+                } else {
+                  window.scrollTo({ top: offset, behavior: "smooth" });
+                }
+              }
+            }}
           >
             <span className="relative z-10">CONTACT</span>
             <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>

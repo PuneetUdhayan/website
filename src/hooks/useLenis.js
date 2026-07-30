@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 
+let lenisInstance = null;
+
+export function getLenis() {
+  return lenisInstance;
+}
+
 export function useLenis() {
   useEffect(() => {
     // Initialize Lenis
@@ -16,6 +22,8 @@ export function useLenis() {
       infinite: false,
     });
 
+    lenisInstance = lenis;
+
     // Request animation frame loop
     function raf(time) {
       lenis.raf(time);
@@ -27,6 +35,7 @@ export function useLenis() {
     // Cleanup
     return () => {
       lenis.destroy();
+      lenisInstance = null;
     };
   }, []);
 }

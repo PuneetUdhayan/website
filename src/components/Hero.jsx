@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import ParallaxRectangles from "./ParallaxRectangles";
 import HorizontalGallery from "./HorizontalGallery";
-import Contact from "./Contact";
 
 function Hero() {
   const titles = ["a software engineer", "an artist"];
@@ -22,7 +21,7 @@ function Hero() {
           (char) =>
             `<span class="inline-block" style="opacity: 0;">${
               char === " " ? "&nbsp;" : char
-            }</span>`
+            }</span>`,
         )
         .join("");
 
@@ -49,7 +48,7 @@ function Hero() {
             // Signal that hero animation is complete
             setHeroAnimationComplete(true);
           },
-        }
+        },
       );
     }, heroTextRef);
 
@@ -71,7 +70,7 @@ function Hero() {
         .fromTo(
           ".title-text",
           { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
+          { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
         )
         .to({}, { duration: 2 }) // Hold for 2 seconds
         .to(".title-text", {
@@ -81,7 +80,7 @@ function Hero() {
           ease: "power2.in",
           onComplete: () => {
             setCurrentTitleIndex(
-              (prevIndex) => (prevIndex + 1) % titles.length
+              (prevIndex) => (prevIndex + 1) % titles.length,
             );
           },
         });
@@ -114,8 +113,7 @@ function Hero() {
         </div>
       </div>
 
-      <HorizontalGallery />
-      <Contact />
+      {/* <HorizontalGallery /> */}
     </>
   );
 }
