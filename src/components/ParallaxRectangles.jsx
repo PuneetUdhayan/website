@@ -12,6 +12,16 @@ const ALL_IMAGES = Object.values(imageModules);
 
 const IMAGE_RECTANGLE_PERCENTAGE = 0.7;
 
+// Rectangle px sizes were designed against a ~1440px-wide desktop viewport.
+// Scale them down proportionally on narrower screens (13" laptops, phones)
+// instead of leaving them fixed-size, but never grow past the designed size
+// or shrink below half of it.
+const REFERENCE_VIEWPORT = 1440;
+function responsiveSize(px) {
+  const vw = `${((px / REFERENCE_VIEWPORT) * 100).toFixed(3)}vw`;
+  return `clamp(${px * 0.5}px, ${vw}, ${px}px)`;
+}
+
 // Called once on component init — picks a percentage of layer1 indices at random,
 // then assigns shuffled images from the build-time list.
 function withRandomImages(layer1) {
@@ -502,8 +512,8 @@ function ParallaxRectangles() {
             ref={(el) => (layer1Refs.current[index] = el)}
             className="absolute will-change-transform"
             style={{
-              width: `${rect.width}px`,
-              height: `${rect.height}px`,
+              width: responsiveSize(rect.width),
+              height: responsiveSize(rect.height),
               left: `${rect.left}%`,
               top: `${rect.top}%`,
               backgroundColor: rect.image ? "transparent" : rect.color,
@@ -537,8 +547,8 @@ function ParallaxRectangles() {
             ref={(el) => (layer2Refs.current[index] = el)}
             className="absolute will-change-transform"
             style={{
-              width: `${rect.width}px`,
-              height: `${rect.height}px`,
+              width: responsiveSize(rect.width),
+              height: responsiveSize(rect.height),
               left: `${rect.left}%`,
               top: `${rect.top}%`,
               backgroundColor: rect.color,

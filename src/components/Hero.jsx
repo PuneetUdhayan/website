@@ -96,16 +96,19 @@ function Hero() {
         className="h-screen flex justify-center items-center relative"
         style={{ zIndex: 1 }}
       >
-        <div className="flex flex-col items-center">
-          <h1 ref={heroTextRef} className="font-main text-6xl">
+        <div className="flex flex-col items-center px-4 text-center">
+          <h1
+            ref={heroTextRef}
+            className="font-main text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+          >
             I am Puneet Udhayan. I am
           </h1>
           <div
             ref={titleContainerRef}
-            className="relative h-20 overflow-hidden"
+            className="relative h-10 sm:h-14 md:h-16 lg:h-20 overflow-hidden"
           >
             {heroAnimationComplete && (
-              <h1 className="title-text font-main text-6xl whitespace-nowrap">
+              <h1 className="title-text font-main text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap">
                 {titles[currentTitleIndex]}
               </h1>
             )}

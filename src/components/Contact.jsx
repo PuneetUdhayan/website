@@ -5,6 +5,18 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// The expanded background used to always leave a flat 320px (20rem) margin
+// on every side. On a phone-width viewport that ate almost the whole width,
+// leaving a sliver instead of a photo. Shrink the margin away on small
+// screens so the image fills the screen there, and scale it down gradually
+// on tablets.
+function getBgMargin() {
+  const w = window.innerWidth;
+  if (w < 640) return 0;
+  if (w < 1024) return 160;
+  return 320;
+}
+
 function Contact() {
   const bgRef = useRef(null);
   const containerRef = useRef(null);
@@ -72,10 +84,11 @@ function Contact() {
                 gsap.parseEase("power1.inOut")(phase2Progress);
 
               // Calculate dimensions
+              const margin = getBgMargin();
               const startWidth = 135;
-              const endWidth = window.innerWidth - 320; // 20rem = 320px
+              const endWidth = window.innerWidth - margin;
               const startHeight = 175;
-              const endHeight = window.innerHeight - 320;
+              const endHeight = window.innerHeight - margin;
 
               const currentWidth =
                 startWidth + (endWidth - startWidth) * easedProgress;
@@ -98,9 +111,10 @@ function Contact() {
               const easedProgress =
                 gsap.parseEase("power2.out")(phase3Progress);
 
+              const margin = getBgMargin();
               gsap.set(bgRef.current, {
-                width: "calc(100% - 20rem)",
-                height: "calc(100% - 20rem)",
+                width: margin === 0 ? "100%" : `calc(100% - ${margin}px)`,
+                height: margin === 0 ? "100%" : `calc(100% - ${margin}px)`,
                 left: "50%",
                 top: "50%",
                 xPercent: -50,
@@ -139,9 +153,9 @@ function Contact() {
       {/* Contact card */}
       <div
         ref={cardRef}
-        className="bg-white/95 backdrop-blur-sm p-12 max-w-md relative z-10 shadow-lg"
+        className="bg-white/95 backdrop-blur-sm p-8 sm:p-12 w-[calc(100%-2rem)] max-w-md relative z-10 shadow-lg"
       >
-        <h1 className="font-main text-5xl mb-6">Contact me</h1>
+        <h1 className="font-main text-4xl sm:text-5xl mb-6">Contact me</h1>
         <p className="text-gray-600 text-lg mb-8 leading-relaxed">
           Have a question, project idea, or just want to say hello? I'd love to
           hear from you.
@@ -150,7 +164,7 @@ function Contact() {
         {/* Social media icons */}
         <div className="flex gap-3">
           <a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/in/puneet-udhayan"
             target="_blank"
             rel="noopener noreferrer"
             className="w-10 h-10 bg-black flex items-center justify-center text-white hover:bg-gray-800 transition-colors"
@@ -162,7 +176,7 @@ function Contact() {
           </a>
 
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/puneets_art/"
             target="_blank"
             rel="noopener noreferrer"
             className="w-10 h-10 bg-black flex items-center justify-center text-white hover:bg-gray-800 transition-colors"
@@ -174,7 +188,7 @@ function Contact() {
           </a>
 
           <a
-            href="https://github.com"
+            href="https://github.com/PuneetUdhayan"
             target="_blank"
             rel="noopener noreferrer"
             className="w-10 h-10 bg-black flex items-center justify-center text-white hover:bg-gray-800 transition-colors"
@@ -186,7 +200,7 @@ function Contact() {
           </a>
 
           <a
-            href="mailto:contact@example.com"
+            href="mailto:puneetudhayan@gmail.com"
             className="w-10 h-10 bg-black flex items-center justify-center text-white hover:bg-gray-800 transition-colors"
             aria-label="Email"
           >
