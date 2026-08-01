@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Puneet Udhayan</title>
+    <script>
+      // GitHub Pages has no server-side router, so a direct hit or refresh on
+      // a client-side route (e.g. /website/art) 404s here instead of loading
+      // the SPA. Re-encode the path into a query string and bounce back to
+      // index.html, which decodes it and restores the real URL (see index.html).
+      var pathSegmentsToKeep = 1; // "/website"
+      var l = window.location;
+      l.replace(
+        l.protocol +
+          "//" +
+          l.hostname +
+          (l.port ? ":" + l.port : "") +
+          l.pathname.split("/").slice(0, 1 + pathSegmentsToKeep).join("/") +
+          "/?/" +
+          l.pathname
+            .slice(1)
+            .split("/")
+            .slice(pathSegmentsToKeep)
+            .join("/")
+            .replace(/&/g, "~and~") +
+          (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash,
+      );
+    </script>
+  </head>
+  <body></body>
+</html>

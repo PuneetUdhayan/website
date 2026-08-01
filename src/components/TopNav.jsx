@@ -2,12 +2,33 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getLenis } from "../hooks/useLenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function TopNav() {
   const linksRef = useRef([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleContactClick = (e) => {
+    e.preventDefault();
+    if (location.pathname !== "/") {
+      navigate("/#contact");
+      return;
+    }
+    const lenis = getLenis();
+    const target = document.getElementById("contact");
+    if (target) {
+      const offset = target.offsetTop + window.innerHeight * 2;
+      if (lenis) {
+        lenis.scrollTo(offset, { duration: 4 });
+      } else {
+        window.scrollTo({ top: offset, behavior: "smooth" });
+      }
+    }
+  };
 
   useGSAP(() => {
     // Initial load animation for links
@@ -113,10 +134,29 @@ function TopNav() {
       link.addEventListener("mousemove", handleMouseMove);
     });
   });
+
+  // The title's entrance above is tied to scrolling past the nav on the
+  // home page. Other pages may not have enough scroll distance to ever
+  // trigger that, so reveal it immediately whenever we're not on "/".
+  useGSAP(
+    () => {
+      if (location.pathname === "/") return;
+      gsap.to(".nav-title", {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+    },
+    { dependencies: [location.pathname] }
+  );
+
   return (
     <nav className="fixed z-50 w-full top-0 px-8 py-6">
       <div className="flex justify-between">
-        <div className="font-main text-2xl nav-title">Puneet Udhayan</div>
+        <Link to="/" className="font-main text-2xl nav-title cursor-pointer">
+          Puneet Udhayan
+        </Link>
         <div className="flex flex-col font-inter font-thin gap-1">
           <a
             href="#blogs"
@@ -127,33 +167,21 @@ function TopNav() {
             <span className="relative z-10">BLOGS</span>
             <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
           </a>
-          <a
-            href="#art"
+          <Link
+            to="/art"
             ref={(el) => (linksRef.current[1] = el)}
             className="nav-link relative overflow-hidden cursor-pointer"
             style={{ opacity: 0 }}
           >
             <span className="relative z-10">ART</span>
             <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
-          </a>
+          </Link>
           <a
-            href="#contact"
+            href="/#contact"
             ref={(el) => (linksRef.current[2] = el)}
             className="nav-link relative overflow-hidden cursor-pointer"
             style={{ opacity: 0 }}
-            onClick={(e) => {
-              e.preventDefault();
-              const lenis = getLenis();
-              const target = document.getElementById("contact");
-              if (target) {
-                const offset = target.offsetTop + window.innerHeight * 2;
-                if (lenis) {
-                  lenis.scrollTo(offset, { duration: 4 });
-                } else {
-                  window.scrollTo({ top: offset, behavior: "smooth" });
-                }
-              }
-            }}
+            onClick={handleContactClick}
           >
             <span className="relative z-10">CONTACT</span>
             <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
