@@ -36,8 +36,28 @@
         "worksFor": "IBM watsonx.governance"
       }
     </script>
-    <script type="module" crossorigin src="/website/assets/index-pSyQ21nl.js"></script>
-    <link rel="stylesheet" crossorigin href="/website/assets/index-D9a-kcfp.css">
+    <script>
+      // Restores the real URL after the 404.html GitHub Pages redirect
+      // (see public/404.html) so client-side routes load correctly.
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash,
+          );
+        }
+      })(window.location);
+    </script>
+    <script type="module" crossorigin src="/website/assets/index-Cr8hyXWI.js"></script>
+    <link rel="stylesheet" crossorigin href="/website/assets/index-DHz-C93g.css">
   </head>
   <body>
     <div id="root"></div>
