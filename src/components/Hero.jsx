@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import ParallaxRectangles from "./ParallaxRectangles";
 import HorizontalGallery from "./HorizontalGallery";
+import { getLenis } from "../hooks/useLenis";
 
 function Hero() {
   const titles = ["a software engineer", "an artist"];
@@ -89,6 +90,16 @@ function Hero() {
     return () => ctx.revert();
   }, [currentTitleIndex, titles.length, heroAnimationComplete]);
 
+  const handleScrollClick = () => {
+    const lenis = getLenis();
+    const offset = window.innerHeight;
+    if (lenis) {
+      lenis.scrollTo(offset, { duration: 1.5 });
+    } else {
+      window.scrollTo({ top: offset, behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <ParallaxRectangles />
@@ -114,6 +125,32 @@ function Hero() {
             )}
           </div>
         </div>
+
+        <button
+          type="button"
+          onClick={handleScrollClick}
+          aria-label="Scroll down"
+          className={`absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 font-inter text-[9px] tracking-[0.2em] text-black/35 cursor-pointer transition-opacity duration-700 ${
+            heroAnimationComplete ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-black/20">
+            <svg
+              className="h-4 w-4 animate-bounce"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4v16m-6-6l6 6 6-6"
+              />
+            </svg>
+          </span>
+          SCROLL
+        </button>
       </div>
 
       {/* <HorizontalGallery /> */}

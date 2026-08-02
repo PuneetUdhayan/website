@@ -16,8 +16,15 @@ function Home() {
     if (location.hash !== "#contact") return;
     const target = document.getElementById("contact");
     if (!target) return;
-    const offset = target.offsetTop + window.innerHeight * 2;
     const lenis = getLenis();
+    // Lenis caches the page's scrollable height and only recalculates it
+    // via ResizeObserver, which doesn't reliably fire on a client-side
+    // route swap. Arriving here from another route (e.g. /art, which has
+    // no scroll of its own) leaves Lenis thinking the page still has ~0
+    // scrollable height, so it silently clamps scrollTo to 0. Force a
+    // remeasure before computing the offset.
+    lenis?.resize();
+    const offset = target.offsetTop + window.innerHeight * 2;
     if (lenis) {
       lenis.scrollTo(offset, { duration: 4 });
     } else {

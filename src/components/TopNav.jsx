@@ -1,7 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getLenis } from "../hooks/useLenis";
 
@@ -9,16 +9,26 @@ gsap.registerPlugin(ScrollTrigger);
 
 function TopNav() {
   const linksRef = useRef([]);
+  const drawerRef = useRef(null);
+  const barTopRef = useRef(null);
+  const barMidRef = useRef(null);
+  const barBotRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleContactClick = (e) => {
     e.preventDefault();
+    setMenuOpen(false);
     if (location.pathname !== "/") {
       navigate("/#contact");
       return;
     }
     const lenis = getLenis();
+    // The drawer-open effect stops Lenis to lock background scroll; its
+    // cleanup (which calls start()) hasn't run yet at this point in the
+    // same click, and a stopped Lenis silently ignores scrollTo.
+    lenis?.start();
     const target = document.getElementById("contact");
     if (target) {
       const offset = target.offsetTop + window.innerHeight * 2;
@@ -29,6 +39,64 @@ function TopNav() {
       }
     }
   };
+
+  // Keep the drawer from being stuck open behind a resize into desktop
+  // width, and stop background scroll (Lenis handles wheel, but not
+  // native touch scroll) while it's open.
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onResize() {
+      if (window.innerWidth >= 640) setMenuOpen(false);
+    }
+    function onKeyDown(e) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    window.addEventListener("resize", onResize);
+    window.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+    getLenis()?.stop();
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+      getLenis()?.start();
+    };
+  }, [menuOpen]);
+
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.inOut", duration: 0.3 },
+      });
+
+      if (menuOpen) {
+        tl.set(drawerRef.current, { pointerEvents: "auto" })
+          .to(drawerRef.current, { autoAlpha: 1, duration: 0.35 })
+          .fromTo(
+            ".drawer-link",
+            { y: 24, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.5,
+              stagger: 0.08,
+              ease: "power3.out",
+            },
+            "-=0.1",
+          )
+          .to(barTopRef.current, { rotate: 45, y: 6 }, 0)
+          .to(barMidRef.current, { opacity: 0 }, 0)
+          .to(barBotRef.current, { rotate: -45, y: -6 }, 0);
+      } else {
+        tl.to(drawerRef.current, { autoAlpha: 0, duration: 0.25 })
+          .set(drawerRef.current, { pointerEvents: "none" })
+          .to(barTopRef.current, { rotate: 0, y: 0 }, 0)
+          .to(barMidRef.current, { opacity: 1 }, 0)
+          .to(barBotRef.current, { rotate: 0, y: 0 }, 0);
+      }
+    },
+    { dependencies: [menuOpen] },
+  );
 
   useGSAP(() => {
     // Initial load animation for links
@@ -42,7 +110,7 @@ function TopNav() {
         ease: "power2.out",
         stagger: 0.15,
         delay: 0.3,
-      }
+      },
     );
 
     // Scroll-triggered background animation
@@ -62,7 +130,7 @@ function TopNav() {
         backdropFilter: "blur(10px)",
         duration: 1,
         ease: "power1.inOut",
-      }
+      },
     );
 
     navTween.fromTo(
@@ -74,7 +142,7 @@ function TopNav() {
         duration: 0.8,
         ease: "power2.out",
       },
-      "<0.2"
+      "<0.2",
     );
 
     // Magnetic hover effect for links
@@ -148,23 +216,23 @@ function TopNav() {
         ease: "power2.out",
       });
     },
-    { dependencies: [location.pathname] }
+    { dependencies: [location.pathname] },
   );
 
   return (
     <nav className="fixed z-50 w-full top-0 px-8 py-6">
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <Link to="/" className="font-main text-2xl nav-title cursor-pointer">
           Puneet Udhayan
         </Link>
-        <div className="flex flex-col font-inter font-thin gap-1">
+        <div className="hidden sm:flex sm:flex-col font-inter font-thin gap-1">
           <a
-            href="#blogs"
+            href="#tech"
             ref={(el) => (linksRef.current[0] = el)}
             className="nav-link relative overflow-hidden cursor-pointer"
             style={{ opacity: 0 }}
           >
-            <span className="relative z-10">BLOGS</span>
+            <span className="relative z-10">TECH</span>
             <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
           </a>
           <Link
@@ -187,6 +255,57 @@ function TopNav() {
             <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
           </a>
         </div>
+
+        <button
+          type="button"
+          className="sm:hidden relative z-[70] flex h-8 w-8 shrink-0 flex-col items-center justify-center gap-[5px] cursor-pointer"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span
+            ref={barTopRef}
+            className="block h-[1.5px] w-6 bg-black"
+            style={{ transformOrigin: "center" }}
+          />
+          <span
+            ref={barMidRef}
+            className="block h-[1.5px] w-6 bg-black"
+            style={{ transformOrigin: "center" }}
+          />
+          <span
+            ref={barBotRef}
+            className="block h-[1.5px] w-6 bg-black"
+            style={{ transformOrigin: "center" }}
+          />
+        </button>
+      </div>
+
+      <div
+        ref={drawerRef}
+        className="invisible fixed inset-0 z-[60] flex flex-col items-center justify-center gap-10 bg-[#fdfdfc] opacity-0 sm:hidden"
+      >
+        <a
+          href="#tech"
+          className="drawer-link font-inter text-3xl"
+          onClick={() => setMenuOpen(false)}
+        >
+          TECH
+        </a>
+        <Link
+          to="/art"
+          className="drawer-link font-inter text-3xl"
+          onClick={() => setMenuOpen(false)}
+        >
+          ART
+        </Link>
+        <a
+          href="/#contact"
+          className="drawer-link font-inter text-3xl"
+          onClick={handleContactClick}
+        >
+          CONTACT
+        </a>
       </div>
     </nav>
   );

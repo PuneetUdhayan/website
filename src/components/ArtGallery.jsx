@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -10,25 +10,70 @@ const imageModules = import.meta.glob("../../public/images/*.webp", {
 });
 const ALL_IMAGES = Object.values(imageModules);
 
-const PAGE_SIZE = 8;
-const PAGES = [];
-for (let i = 0; i < ALL_IMAGES.length; i += PAGE_SIZE) {
-  PAGES.push(ALL_IMAGES.slice(i, i + PAGE_SIZE));
-}
-
 const EASE = "power3.out";
 
+// Tile count/columns are tied together so the grid always resolves to two
+// rows — that's what keeps everything inside one screen with no scroll
+// (a scrollbar here fights the fixed nav's scroll-triggered animation).
+const LAYOUTS = [
+  { maxWidth: 640, pageSize: 4, columns: 2 }, // small phones
+  { maxWidth: 1440, pageSize: 6, columns: 3 }, // 13" laptops / tablets
+  { maxWidth: Infinity, pageSize: 8, columns: 4 }, // larger desktops
+];
+
+const COLUMN_CLASS = {
+  2: "grid-cols-2",
+  3: "grid-cols-3",
+  4: "grid-cols-4",
+};
+
+function getLayout(width) {
+  return LAYOUTS.find((l) => width <= l.maxWidth) || LAYOUTS[LAYOUTS.length - 1];
+}
+
 function ArtGallery() {
+  const [layout, setLayout] = useState(() =>
+    getLayout(typeof window !== "undefined" ? window.innerWidth : 1440),
+  );
   const [page, setPage] = useState(0);
   const [hovered, setHovered] = useState(null);
   const [openIndex, setOpenIndex] = useState(null);
   const gridRef = useRef(null);
+  const touchStartRef = useRef(null);
+  const wheelLockRef = useRef(false);
+
+  const PAGE_SIZE = layout.pageSize;
+  const PAGES = useMemo(() => {
+    const pages = [];
+    for (let i = 0; i < ALL_IMAGES.length; i += PAGE_SIZE) {
+      pages.push(ALL_IMAGES.slice(i, i + PAGE_SIZE));
+    }
+    return pages;
+  }, [PAGE_SIZE]);
 
   const goToPage = (p) => {
-    if (p === page) return;
-    setPage(Math.max(0, Math.min(PAGES.length - 1, p)));
+    const next = Math.max(0, Math.min(PAGES.length - 1, p));
+    if (next === page) return;
+    setPage(next);
     setHovered(null);
   };
+
+  useEffect(() => {
+    function onResize() {
+      setLayout((prev) => {
+        const next = getLayout(window.innerWidth);
+        return next.pageSize === prev.pageSize ? prev : next;
+      });
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Page indices mean different images once the layout's page size changes.
+  useEffect(() => {
+    setPage(0);
+    setHovered(null);
+  }, [layout.pageSize]);
 
   useEffect(() => {
     function onKeyDown(e) {
@@ -43,6 +88,35 @@ function ArtGallery() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   });
+
+  // Lets the gallery be paged with a horizontal swipe (touch) or a
+  // trackpad's horizontal scroll, in addition to the dots/arrow keys.
+  const handleTouchStart = (e) => {
+    if (openIndex !== null) return;
+    const t = e.touches[0];
+    touchStartRef.current = { x: t.clientX, y: t.clientY };
+  };
+
+  const handleTouchEnd = (e) => {
+    if (openIndex !== null || !touchStartRef.current) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartRef.current.x;
+    const dy = t.clientY - touchStartRef.current.y;
+    touchStartRef.current = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    goToPage(page + (dx < 0 ? 1 : -1));
+  };
+
+  const handleWheel = (e) => {
+    if (openIndex !== null) return;
+    if (Math.abs(e.deltaX) < 24 || Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+    if (wheelLockRef.current) return;
+    wheelLockRef.current = true;
+    goToPage(page + (e.deltaX > 0 ? 1 : -1));
+    setTimeout(() => {
+      wheelLockRef.current = false;
+    }, 500);
+  };
 
   useGSAP(
     () => {
@@ -67,11 +141,16 @@ function ArtGallery() {
   const tiles = PAGES[page] || [];
 
   return (
-    <div className="min-h-screen bg-[#fdfdfc] text-[#111111] flex flex-col">
-      <div className="flex-1 flex items-center justify-center px-6 sm:px-10 pt-36 pb-20">
+    <div className="h-dvh overflow-hidden bg-[#fdfdfc] text-[#111111] flex flex-col">
+      <div
+        className="flex-1 min-h-0 flex items-center justify-center px-6 sm:px-10 pt-24 pb-4 sm:pt-32 sm:pb-6 lg:pt-36 lg:pb-8"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
+      >
         <div
           ref={gridRef}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-10 lg:gap-14 max-w-5xl w-full"
+          className={`grid ${COLUMN_CLASS[layout.columns]} auto-rows-fr gap-3 sm:gap-6 lg:gap-8 max-w-5xl w-full h-full`}
         >
           {tiles.map((src, i) => {
             const isHovered = hovered === i;
@@ -79,7 +158,7 @@ function ArtGallery() {
             return (
               <div
                 key={src}
-                className="art-tile relative aspect-[150/191] bg-[#1b1b1b] overflow-hidden cursor-pointer"
+                className="art-tile relative bg-[#1b1b1b] overflow-hidden cursor-pointer"
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
                 onFocus={() => setHovered(i)}
@@ -128,7 +207,7 @@ function ArtGallery() {
       </div>
 
       {PAGES.length > 1 && (
-        <footer className="flex flex-col items-center gap-6 pb-12">
+        <footer className="flex flex-shrink-0 flex-col items-center gap-3 pb-4 sm:gap-4 sm:pb-6 lg:gap-6 lg:pb-8">
           <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-[#e9e9e7]">
             {PAGES.map((_, i) => (
               <button
