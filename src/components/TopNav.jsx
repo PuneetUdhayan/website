@@ -220,67 +220,73 @@ function TopNav() {
   );
 
   return (
-    <nav className="fixed z-50 w-full top-0 px-8 py-6">
-      <div className="flex justify-between items-center">
-        <Link to="/" className="font-main text-2xl nav-title cursor-pointer">
-          Puneet Udhayan
-        </Link>
-        <div className="hidden sm:flex sm:flex-col font-inter font-thin gap-1">
-          <Link
-            to="/tech"
-            ref={(el) => (linksRef.current[0] = el)}
-            className="nav-link relative overflow-hidden cursor-pointer"
-            style={{ opacity: 0 }}
-          >
-            <span className="relative z-10">TECH</span>
-            <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
+    <>
+      <nav className="fixed z-50 w-full top-0 px-8 py-6">
+        <div className="flex justify-between items-center">
+          <Link to="/" className="font-main text-2xl nav-title cursor-pointer">
+            Puneet Udhayan
           </Link>
-          <Link
-            to="/art"
-            ref={(el) => (linksRef.current[1] = el)}
-            className="nav-link relative overflow-hidden cursor-pointer"
-            style={{ opacity: 0 }}
+          <div className="hidden sm:flex sm:flex-col font-inter font-thin gap-1">
+            <Link
+              to="/tech"
+              ref={(el) => (linksRef.current[0] = el)}
+              className="nav-link relative overflow-hidden cursor-pointer"
+              style={{ opacity: 0 }}
+            >
+              <span className="relative z-10">TECH</span>
+              <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
+            </Link>
+            <Link
+              to="/art"
+              ref={(el) => (linksRef.current[1] = el)}
+              className="nav-link relative overflow-hidden cursor-pointer"
+              style={{ opacity: 0 }}
+            >
+              <span className="relative z-10">ART</span>
+              <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
+            </Link>
+            <a
+              href="/#contact"
+              ref={(el) => (linksRef.current[2] = el)}
+              className="nav-link relative overflow-hidden cursor-pointer"
+              style={{ opacity: 0 }}
+              onClick={handleContactClick}
+            >
+              <span className="relative z-10">CONTACT</span>
+              <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
+            </a>
+          </div>
+
+          <button
+            type="button"
+            className="sm:hidden relative z-[70] flex h-8 w-8 shrink-0 flex-col items-center justify-center gap-[5px] cursor-pointer"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
           >
-            <span className="relative z-10">ART</span>
-            <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
-          </Link>
-          <a
-            href="/#contact"
-            ref={(el) => (linksRef.current[2] = el)}
-            className="nav-link relative overflow-hidden cursor-pointer"
-            style={{ opacity: 0 }}
-            onClick={handleContactClick}
-          >
-            <span className="relative z-10">CONTACT</span>
-            <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
-          </a>
+            <span
+              ref={barTopRef}
+              className="block h-[1.5px] w-6 bg-black"
+              style={{ transformOrigin: "center" }}
+            />
+            <span
+              ref={barMidRef}
+              className="block h-[1.5px] w-6 bg-black"
+              style={{ transformOrigin: "center" }}
+            />
+            <span
+              ref={barBotRef}
+              className="block h-[1.5px] w-6 bg-black"
+              style={{ transformOrigin: "center" }}
+            />
+          </button>
         </div>
+      </nav>
 
-        <button
-          type="button"
-          className="sm:hidden relative z-[70] flex h-8 w-8 shrink-0 flex-col items-center justify-center gap-[5px] cursor-pointer"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          <span
-            ref={barTopRef}
-            className="block h-[1.5px] w-6 bg-black"
-            style={{ transformOrigin: "center" }}
-          />
-          <span
-            ref={barMidRef}
-            className="block h-[1.5px] w-6 bg-black"
-            style={{ transformOrigin: "center" }}
-          />
-          <span
-            ref={barBotRef}
-            className="block h-[1.5px] w-6 bg-black"
-            style={{ transformOrigin: "center" }}
-          />
-        </button>
-      </div>
-
+      {/* Rendered outside <nav> on purpose: nav's scroll-triggered
+          backdrop-filter animation would otherwise establish a new CSS
+          containing block, trapping this fixed-position overlay inside
+          nav's own (much smaller) box instead of covering the viewport. */}
       <div
         ref={drawerRef}
         className="invisible fixed inset-0 z-[60] flex flex-col items-center justify-center gap-10 bg-[#fdfdfc] opacity-0 sm:hidden"
@@ -307,7 +313,7 @@ function TopNav() {
           CONTACT
         </a>
       </div>
-    </nav>
+    </>
   );
 }
 
