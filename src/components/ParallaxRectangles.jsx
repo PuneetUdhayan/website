@@ -404,6 +404,49 @@ function ParallaxRectangles() {
 
       window.addEventListener("mousemove", handleMouseMove);
 
+      // On touch devices there's no cursor, so drive the same parallax off
+      // the phone's tilt instead. The first reading is treated as "center"
+      // (rather than an absolute angle) since a comfortable holding angle
+      // varies a lot from person to person.
+      let orientationBaseline = null;
+      const handleOrientation = (e) => {
+        if (e.beta == null || e.gamma == null) return;
+        if (!orientationBaseline) {
+          orientationBaseline = { beta: e.beta, gamma: e.gamma };
+        }
+        const TILT_RANGE = 22; // degrees of tilt that reach the full -1..1 range
+        const x = Math.max(
+          -1,
+          Math.min(1, (e.gamma - orientationBaseline.gamma) / TILT_RANGE),
+        );
+        const y = Math.max(
+          -1,
+          Math.min(1, (e.beta - orientationBaseline.beta) / TILT_RANGE),
+        );
+        mousePosition.current = { x, y };
+      };
+
+      const startOrientation = () =>
+        window.addEventListener("deviceorientation", handleOrientation);
+
+      const requestOrientationPermission = () => {
+        window.removeEventListener("touchend", requestOrientationPermission);
+        window.DeviceOrientationEvent.requestPermission()
+          .then((state) => {
+            if (state === "granted") startOrientation();
+          })
+          .catch(() => {});
+      };
+
+      if (typeof window.DeviceOrientationEvent?.requestPermission === "function") {
+        // iOS 13+ only grants motion access after a user gesture.
+        window.addEventListener("touchend", requestOrientationPermission, {
+          once: true,
+        });
+      } else if (typeof window.DeviceOrientationEvent !== "undefined") {
+        startOrientation();
+      }
+
       // Entrance: rectangles/images visible at load "assemble" into place —
       // scaling up, sharpening from a blur, and converging in from just off
       // their resting spot. Staggered by distance from center so the effect
@@ -490,6 +533,8 @@ function ParallaxRectangles() {
 
       return () => {
         window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("deviceorientation", handleOrientation);
+        window.removeEventListener("touchend", requestOrientationPermission);
         gsap.ticker.remove(updateAnimation);
       };
     }, containerRef);
