@@ -226,15 +226,15 @@ function TopNav() {
           Puneet Udhayan
         </Link>
         <div className="hidden sm:flex sm:flex-col font-inter font-thin gap-1">
-          <a
-            href="#tech"
+          <Link
+            to="/tech"
             ref={(el) => (linksRef.current[0] = el)}
             className="nav-link relative overflow-hidden cursor-pointer"
             style={{ opacity: 0 }}
           >
             <span className="relative z-10">TECH</span>
             <span className="link-underline absolute bottom-0 left-0 w-full h-[1px] bg-black origin-left scale-x-0"></span>
-          </a>
+          </Link>
           <Link
             to="/art"
             ref={(el) => (linksRef.current[1] = el)}
@@ -285,13 +285,13 @@ function TopNav() {
         ref={drawerRef}
         className="invisible fixed inset-0 z-[60] flex flex-col items-center justify-center gap-10 bg-[#fdfdfc] opacity-0 sm:hidden"
       >
-        <a
-          href="#tech"
+        <Link
+          to="/tech"
           className="drawer-link font-inter text-3xl"
           onClick={() => setMenuOpen(false)}
         >
           TECH
-        </a>
+        </Link>
         <Link
           to="/art"
           className="drawer-link font-inter text-3xl"

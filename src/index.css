@@ -28,6 +28,10 @@ html.lenis, html.lenis body {
   font-family: "Inter", sans-serif;
 }
 
+@utility font-terminal {
+  font-family: "Press Start 2P", monospace;
+}
+
 @utility flex-center {
   display: flex;
   align-items: center;
@@ -38,4 +42,50 @@ html.lenis, html.lenis body {
     main {
         @apply w-full overflow-x-hidden;
     }
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1em;
+  background: #4af626;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: terminal-blink 1s steps(1) infinite;
+}
+
+@keyframes terminal-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.terminal-scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.15) 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+@keyframes terminal-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.94;
+  }
+  94% {
+    opacity: 1;
+  }
+}
+
+.terminal-flicker {
+  animation: terminal-flicker 6s ease-in-out infinite;
 }

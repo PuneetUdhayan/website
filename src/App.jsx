@@ -5,6 +5,7 @@ import Hero from "./components/Hero";
 import TopNav from "./components/TopNav";
 import Contact from "./components/Contact";
 import ArtGallery from "./components/ArtGallery";
+import Tech from "./components/Tech";
 import { useLenis, getLenis } from "./hooks/useLenis";
 
 function Home() {
@@ -51,6 +52,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/art" element={<ArtGallery />} />
+        <Route path="/tech" element={<Tech />} />
       </Routes>
     </main>
   );
